@@ -18,6 +18,10 @@ class Schema():
 
         return self.meta.tables[table_name]
 
+    def execute(self, *args, **kwargs):
+        with self.session() as session:
+            session.execute(*args, **kwargs)
+
     @contextmanager
     def session(self):
         """Provides a transactional scope around a series of operations."""
