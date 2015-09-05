@@ -1,14 +1,18 @@
 from contextlib import contextmanager
 
-from sqlalchemy import MetaData, create_engine
+from sqlalchemy import Engine, MetaData, create_engine
 from sqlalchemy.orm import sessionmaker
 
 
 class Schema():
 
-    def __init__(self, engine):
+    def __init__(self, engine_or_url, *args, **kwargs):
 
-        self.engine = engine
+        if isinstance(engine_or_url, Engine):
+            self.engine = engine_or_url
+        else:
+            self.engine = create_engine(engine_or_url, *args, **kwargs)
+
         self.meta = MetaData(bind=self.engine)
         self.meta.reflect()
 
