@@ -25,7 +25,7 @@ class Schema():
 
     def execute(self, *args, **kwargs):
         with self.session() as session:
-            session.execute(*args, **kwargs)
+            return session.execute(*args, **kwargs)
 
     @contextmanager
     def session(self):
