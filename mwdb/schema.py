@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 
-from sqlalchemy import Engine, MetaData, create_engine
+from sqlalchemy import MetaData, create_engine
+from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker
 
 
@@ -38,9 +39,3 @@ class Schema():
             raise
         finally:
             session.close()
-
-    @classmethod
-    def from_params(cls, *args, **kwargs):
-        engine = create_engine(*args, **kwargs)
-
-        return cls(engine)
