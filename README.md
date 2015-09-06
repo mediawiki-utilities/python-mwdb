@@ -7,7 +7,7 @@ MediaWiki database.
 * **Documentation:** https://pythonhosted.org/mwdb
 * **License:** MIT
 
-** Basic example
+## Basic example
 
     >>> import mwdb
     >>> enwiki = mwdb.Schema("mysql+pymysql://enwiki.labsdb/enwiki_p" +
@@ -17,7 +17,7 @@ MediaWiki database.
     ...     print(session.query(enwiki.user)
     ...           .filter_by(user_name="EpochFail")
     ...           .first())
-    ... 
+    ...
     (6396742, b'EpochFail', b'', None, None, None, None, None, None, None,
     None, None, b'20080208222802', None, 4270, None)
     >>> result = enwiki.execute("SELECT * FROM user WHERE user_id=:user_id",
