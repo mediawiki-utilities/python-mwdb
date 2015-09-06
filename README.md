@@ -26,3 +26,6 @@ MediaWiki database.
     >>> print(result.fetchone())
     (6396742, b'EpochFail', b'', None, None, None, None, None, None, None,
     None, None, b'20080208222802', None, 4270, None)
+
+## Author
+* Aaron Halfaker -- https://github.com/halfak
