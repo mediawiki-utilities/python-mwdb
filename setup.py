@@ -9,15 +9,16 @@ def requirements(fname):
             for line in open(os.path.join(os.path.dirname(__file__), fname))]
 
 setup(
-    name='mwxml',
-    version="0.1.0",
+    name='mwdb',
+    version="0.0.1",
     author='Aaron Halfaker',
     author_email='aaron.halfaker@gmail.com',
     packages=find_packages(),
     scripts=[],
-    url='http://pypi.python.org/pypi/mwxml',
+    url='http://pypi.python.org/pypi/mwdb',
     license=open('LICENSE').read(),
-    description='A set of utilities for processing MediaWiki XML dump data.',
+    description='A set of utilities for connecting to and querying a ' +
+                'MediaWiki database.',
     long_description=open('README.md').read(),
     install_requires=requirements("requirements.txt"),
     test_suite='nose.collector',
@@ -30,8 +31,6 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries :: Python Modules",
-        "Topic :: Text Processing :: Linguistic",
-        "Topic :: Text Processing :: General",
         "Topic :: Utilities",
         "Topic :: Scientific/Engineering"
     ],
