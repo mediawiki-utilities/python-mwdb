@@ -15,7 +15,7 @@ class Schema():
             self.engine = create_engine(engine_or_url, *args, **kwargs)
 
         self.meta = MetaData(bind=self.engine)
-        self.meta.reflect()
+        self.meta.reflect(views=True)
 
         self.Session = sessionmaker(bind=self.engine)
 
