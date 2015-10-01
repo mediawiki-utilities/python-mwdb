@@ -5,9 +5,10 @@ MediaWiki database.
 
 * **Installation:** ``pip install mwdb``
 * **Documentation:** https://pythonhosted.org/mwdb
+* **Repositiory:** https://github.com/mediawiki-utilities/python-mwdb
 * **License:** MIT
 
-## Basic example
+## Example
 
     >>> import mwdb
     >>> enwiki = mwdb.Schema("mysql+pymysql://enwiki.labsdb/enwiki_p" +
@@ -27,5 +28,5 @@ MediaWiki database.
     (6396742, b'EpochFail', b'', None, None, None, None, None, None, None,
     None, None, b'20080208222802', None, 4270, None)
 
-## Author
+## Authors
 * Aaron Halfaker -- https://github.com/halfak
