@@ -14,7 +14,7 @@ MediaWiki database.
     >>> enwiki = mwdb.Schema("mysql+pymysql://enwiki.labsdb/enwiki_p" +
     ...                     "?read_default_file=~/replica.my.cnf")
     >>>
-    >>> with enwiki.session() as session:
+    >>> with enwiki.transation() as session:
     ...     print(session.query(enwiki.user)
     ...           .filter_by(user_name="EpochFail")
     ...           .first())
