@@ -89,7 +89,7 @@ class Schema():
             **kwargs
                 Passed on to :mod:`sqlalchemy`
         """
-        with self.Session() as session:
+        with self.transaction() as session:
             return session.execute(clause, params=params, **kwargs)
 
     @contextmanager
