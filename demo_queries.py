@@ -2,6 +2,7 @@ import mwdb
 
 enwiki = mwdb.Schema("mysql+pymysql://enwiki.labsdb/enwiki_p" +
                      "?read_default_file=~/replica.my.cnf")
+enwiki.public_replica
 
 with enwiki.transaction() as session:
     print(session.query(enwiki.user)
