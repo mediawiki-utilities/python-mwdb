@@ -10,13 +10,13 @@ MediaWiki database.
 
 The `Schema()` object is a thin wrapper around a
 sqlalchemy `Engine` and `Meta` adapts to the local database setup.  When using
-`Schema()`'s member table ORM, the internal mapping will translate between
+`Schema()` member table ORM, the internal mapping will translate between
 public replicas views (e.g. ``revision_userindex``, ``logging_userindex`` and
 ``logging_logindex``) transparently.  This allows you to write one query that
 will run as expected on either schema.
 
 At the moment, the `execute()` method does not make any such conversion, but a
-helper attribute `public_replica` that is `True` when querying a views via a
+helper attribute `public_replica` that is `True` when querying a views via
 public replica and `False` when querying the production database.
 
 ## Example

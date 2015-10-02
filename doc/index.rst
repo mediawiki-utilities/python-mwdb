@@ -18,7 +18,7 @@ Contents
 
 The :class:`mwdb.Schema` object is a thin wrapper around a sqlalchemy `Engine` and `Meta` adapts to the local database setup.  When using a :class:`mwdb.Schema` member table ORM, the internal mapping will translate between public replicas views (e.g. ``revision_userindex``, ``logging_userindex`` and ``logging_logindex``) transparently.  This allows you to write one query that will run as expected on either schema.
 
-At the moment, the :func:`~mwdb.Schema.execute` method does not make any such conversion, but a helper attribute :attr:`~mwdb.Schema.public_replica` that is `True` when querying a views via a public replica and `False` when querying the production database.
+At the moment, the :func:`~mwdb.Schema.execute` method does not make any such conversion, but a helper attribute :attr:`~mwdb.Schema.public_replica` that is `True` when querying views via a public replica and `False` when querying the production database.
 
 
 Example
