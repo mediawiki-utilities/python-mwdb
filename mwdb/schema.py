@@ -44,6 +44,11 @@ class Schema():
 
         self.meta = MetaData(bind=self.engine)
         self.meta.reflect(views=True)
+        self.public_replica = 'revision_userindex' in self.meta
+        """
+        `bool` : `True` if the schema is part of a public replica with
+                 ``_userindex`` and ``_logindex`` views.
+        """
 
         self.Session = sessionmaker(bind=self.engine)
 
