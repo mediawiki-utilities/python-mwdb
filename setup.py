@@ -10,7 +10,7 @@ def requirements(fname):
 
 setup(
     name='mwdb',
-    version="0.0.1",
+    version="0.1.0",
     author='Aaron Halfaker',
     author_email='aaron.halfaker@gmail.com',
     packages=find_packages(),
