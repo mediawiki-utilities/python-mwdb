@@ -1,0 +1,4 @@
+Schema
+======
+
+.. automodule:: mwdb.schema

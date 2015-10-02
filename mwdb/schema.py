@@ -1,3 +1,13 @@
+"""
+A :class:`mwdb.Schema` represents a pool of connections to a database.  New
+connections will be spawned as needed.  A :class:`mwdb.Schema`
+can execite queries within the context of a :func:`mwdb.Schema.transaction` or
+directly via :func:`mwdb.Schema.execute`.
+
+.. autoclass:: mwdb.Schema
+    :members:
+    :member-order: bysource
+"""
 from contextlib import contextmanager
 
 from sqlalchemy import MetaData, create_engine
@@ -46,8 +56,9 @@ class Schema():
         self.meta.reflect(views=True)
         self.public_replica = 'revision_userindex' in self.meta
         """
-        `bool` : `True` if the schema is part of a public replica with
-                 ``_userindex`` and ``_logindex`` views.
+        `bool`
+            `True` if the schema is part of a public replica with
+            `_userindex` and `_logindex` views.
         """
 
         self.Session = sessionmaker(bind=self.engine)
@@ -61,6 +72,40 @@ class Schema():
                 return self.meta.tables[table_name]
             else:
                 raise TableDoesNotExist(table_name)
+
+    @contextmanager
+    def transaction(self):
+        """
+        Provides a transactional scope around a series of operations on a
+        :class:`sqlalchemy.Session` through the use of a
+        `https://docs.python.org/3/reference/compound_stmts.html#the-with-statement <with statement>`_
+        If any exception is raised within the context of a transation session,
+        the changes will be rolled-back.  If the transactional session
+        completes without error, the changes will committed.
+
+        :Example:
+
+            >>> import mwdb
+            >>> enwiki = mwdb.Schema("mysql+pymysql://enwiki.labsdb/enwiki_p" +
+            ...                      "?read_default_file=~/replica.my.cnf")
+            >>>
+            >>> with enwiki.transation() as session:
+            ...     print(session.query(enwiki.user)
+            ...           .filter_by(user_name="EpochFail")
+            ...           .first())
+            ...
+            (6396742, b'EpochFail', b'', None, None, None, None, None, None,
+             None, None, None, b'20080208222802', None, 4270, None)
+        """
+        session = self.Session()
+        try:
+            yield session
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
 
     def execute(self, clause, params=None, **kwargs):
         """
@@ -91,38 +136,3 @@ class Schema():
         """
         with self.transaction() as session:
             return session.execute(clause, params=params, **kwargs)
-
-    @contextmanager
-    def transaction(self):
-        """
-        Provides a transactional scope around a series of operations on a
-        :class:`sqlalchemy.Session` through the use of a
-        `https://docs.python.org/3/reference/compound_stmts.html#the-with-statement <with statement>`_
-        If any exception is raised within the context of a transation session,
-        the changes will be rolled-back.  If the transactional session
-        completes without error, the changes will committed.
-
-        :Example:
-
-            >>> import mwdb
-            >>> enwiki = mwdb.Schema("mysql+pymysql://enwiki.labsdb/enwiki_p" +
-            ...                      "?read_default_file=~/replica.my.cnf")
-            >>>
-            >>> with enwiki.transation() as session:
-            ...     print(session.query(enwiki.user)
-            ...           .filter_by(user_name="EpochFail")
-            ...           .first())
-            ...
-            (6396742, b'EpochFail', b'', None, None, None, None, None, None,
-             None, None, None, b'20080208222802', None, 4270, None)
-
-        """
-        session = self.Session()
-        try:
-            yield session
-            session.commit()
-        except:
-            session.rollback()
-            raise
-        finally:
-            session.close()
