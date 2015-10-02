@@ -21,8 +21,8 @@ The :class:`mwdb.Schema` object is a thin wrapper around a sqlalchemy `Engine` a
 At the moment, the :func:`~mwdb.Schema.execute` method does not make any such conversion, but a helper attribute :attr:`~mwdb.Schema.public_replica` that is `True` when querying a views via a public replica and `False` when querying the production database.
 
 
-## Example
-
+Example
+-------
     >>> import mwdb
     >>> enwiki = mwdb.Schema("mysql+pymysql://enwiki.labsdb/enwiki_p" +
     ...                      "?read_default_file=~/replica.my.cnf")
@@ -42,6 +42,10 @@ At the moment, the :func:`~mwdb.Schema.execute` method does not make any such co
     >>> print(result.fetchone())
     (4302,)
 
+
+Author
+======
+* Aaron Halfaker -- https://github.com/halfak
 
 
 Indices and tables
