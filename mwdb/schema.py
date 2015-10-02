@@ -4,8 +4,20 @@ from sqlalchemy import MetaData, create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker
 
+from .errors import TableDoesNotExist
+
 
 class Schema():
+
+    TABLE_MAP = {
+        'revision_userindex': 'revision',
+        'logging_logindex': 'logging',
+        'logging_userindex': 'logging'
+    }
+    """
+    Maps the weird view names on labs back to the table names in the
+    production database.
+    """
 
     def __init__(self, engine_or_url, *args, **kwargs):
         """
@@ -37,7 +49,13 @@ class Schema():
 
     def __getattr__(self, table_name):
 
-        return self.meta.tables[table_name]
+        if table_name in self.meta.tables:
+            return self.meta.tables[table_name]
+        else:
+            if table_name in self.TABLE_MAP:
+                return self.meta.tables[table_name]
+            else:
+                raise TableDoesNotExist(table_name)
 
     def execute(self, clause, params=None, **kwargs):
         """

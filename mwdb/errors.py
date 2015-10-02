@@ -1,0 +1,3 @@
+
+class TableDoesNotExist(RuntimeError):
+    pass
