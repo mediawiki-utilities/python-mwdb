@@ -19,17 +19,76 @@ from .errors import TableDoesNotExist
 
 class Schema():
 
-    TABLE_MAP = {
+    INDEX_TABLE_MAP = {
+        'archive_userindex': 'archive',
         'revision_userindex': 'revision',
         'logging_logindex': 'logging',
-        'logging_userindex': 'logging'
+        'logging_userindex': 'logging',
+        'recentchanges_userindex': 'recentchanges',
+        'filearchive_userindex': 'filearchive',
+        'ipblocks_ipindex': 'ipblocks',
+        'oldimage_userindex': 'oldimage'
     }
     """
     Maps the weird view names on labs back to the table names in the
     production database.
     """
 
-    def __init__(self, engine_or_url, *args, **kwargs):
+    ONLY_TABLES = (
+        'abuse_filter', 'abuse_filter_action', 'abuse_filter_log',
+        'archive', 'archive_userindex',
+        'category', 'categorylinks',
+        'change_tag',
+        'ep_articles', 'ep_cas', 'ep_courses'
+        'ep_events', 'ep_instructors', 'ep_oas', 'ep_orgs',
+        'ep_revisions', 'ep_students', 'ep_users_per_course',
+        'externallinks',
+        'filearchive', 'filearchive_userindex',
+        'flaggedimages', 'flaggedpage_config', 'flaggedpage_pending',
+        'flaggedpages', 'flaggedrevs', 'flaggedrevs_promote',
+        'flaggedrevs_statistics', 'flaggedrevs_stats', 'flaggedrevs_stats2',
+        'flaggedrevs_tracking', 'flaggedtemplates', 'geo_tags',
+        'global_block_whitelist',
+        'image', 'imagelinks',
+        'interwiki',
+        'ipblocks', 'ipblocks_ipindex',
+        'iwlinks',
+        'l10n_cache', 'langlinks',
+        'localisation', 'localisation_file_hash',
+        'logging', 'logging_logindex', 'logging_userindex',
+        'mark_as_helpful',
+        'math',
+        'module_deps',
+        'msg_resource_links',
+        'oldimage', 'oldimage_userindex',
+        'ores_classification', 'ores_model',
+        'page', 'page_assessments', 'page_assessments_projects',
+        'page_props', 'page_restrictions',
+        'pagelinks',
+        'pagetriage_log', 'pagetriage_page', 'pagetriage_page_tags',
+        'pagetriage_tags',
+        'pif_edits',
+        'povwatch_log', 'povwatch_subscribers',
+        'protected_titles',
+        'recentchanges', 'recentchanges_userindex',
+        'redirect',
+        'revision', 'revision_userindex',
+        'site_identifiers', 'site_stats', 'sites',
+        'tag_summary',
+        'templatelinks',
+        'transcode',
+        'updatelog', 'updates',
+        'user', 'user_former_groups', 'user_groups',    'user_properties',
+        'user_properties_anon',
+        'valid_tag',
+        'watchlist_count',
+        'wbc_entity_usage',
+        'wikilove_image_log', 'wikilove_log')
+    """
+    A list of tables that will be loaded from the underlying schema.
+    """
+
+    def __init__(self, engine_or_url, only_tables=None, *args, **kwargs):
         """
         :Parameters:
             engine_or_url : :class:`sqlalchemy.engine.Engine` or `str`
@@ -53,7 +112,7 @@ class Schema():
             self.engine = create_engine(engine_or_url, *args, **kwargs)
 
         self.meta = MetaData(bind=self.engine)
-        self.meta.reflect(views=True)
+        self.meta.reflect(views=True, only=only_tables or ONLY_TABLES)
         self.public_replica = 'revision_userindex' in self.meta
         """
         `bool`
@@ -69,7 +128,7 @@ class Schema():
             return self.meta.tables[table_name]
         else:
             if table_name in self.TABLE_MAP:
-                return self.meta.tables[table_name]
+                return self.meta.tables[self.TABLE_MAP[table_name]]
             else:
                 raise TableDoesNotExist(table_name)
 
